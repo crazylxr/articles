@@ -1,6 +1,6 @@
-我发布了我的第一个 npm 组件，一个[基于 react 的 3d 标签云](https://www.npmjs.com/package/react3dtagcloud)组件。在这途中我也是遇到了很多的坑，花在完善整个发布流程的时间远多于写这个组件本身的时间，所以我记录下我觉得一个正常的 react 组件的发布流程
+# 发布 react 组件到 npm
 
-> 最后记录这篇文章花的时间比我完成整个组件的时间都多，最终希望能给新手带来帮助
+我发布了我的第一个 npm 组件，一个[基于 react 的 3d 标签云](https://www.npmjs.com/package/react3dtagcloud)组件。在这途中我也是遇到了很多的坑，花在完善整个发布流程的时间远多于写这个组件本身的时间，所以我记录下我觉得一个正常的 react 组件的发布流程。
 
 在整个发布组件的过程我做了如下几件事儿：
 
@@ -212,11 +212,9 @@ Webpack 的配置文件主要做了如下事情：
 10. FAQ
 11. Change Log（更新日志）
 
-#### 添加徽章
-
 当你写完 **README** 之后，我们将添加一些来自 [shields.io](https://link.juejin.im/?target=https%3A%2F%2Fshields.io%2F) 的时髦徽章，让人们知道我们又酷又专业。
 
-![](http://imgs.taoweng.site/blog/typecho/1548919239.png)
+![image-20190128123552436](/Users/licai/Library/Application Support/typora-user-images/image-20190128123552436.png)
 
 想添加什么样的徽章看自己喜欢吧，种类有很多。
 
@@ -437,10 +435,6 @@ package.json 里面的配置信息非常重要，我解释一下几个重要的�
 
 ```
 
-这些配置信息都会在 npm 包的页面显示出来的，所以能填还是填一下：
-
-![](http://imgs.taoweng.site/blog/typecho/1548919186.png)
-
 最后我们在项目中添加 .npmignore 文件，跟 .gitignore 的作用一样，就是在发布 npm 的时候需要忽略的文件和文件夹：
 
 ```
@@ -473,7 +467,3 @@ npm publish --access=public
 另外在写组件之前可以先了解下有没有类似的组件了，如果有就直接用吧，咱们就站在巨人的肩膀上，把自己宝贵的时间放在创造价值上。
 
 最后整个项目的源代码见 [github](https://github.com/crazylxr/react-demo)
-
-## 参考文章
-- [从 0 开始发布一个 react 组件到 npm](https://zhuanlan.zhihu.com/p/37366401 "从 0 开始发布一个 react 组件到 npm")
-- [创建并发布一个小而美的 npm 包，没你想的那么难！](https://juejin.im/post/5c26c1b65188252dcb312ad6 "创建并发布一个小而美的 npm 包，没你想的那么难！")
