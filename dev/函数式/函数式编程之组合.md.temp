@@ -204,6 +204,7 @@ var snakeCase = word => word.toLowerCase().replace(/\s+/ig, '_');
 var snakeCase = compose(replace(/\s+/ig, '_'), toLowerCase);
 ```
 
+
 ## 柯里化
 ## 部分应用
 
