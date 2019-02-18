@@ -41,7 +41,8 @@ function requestWork(root: FiberRoot, expirationTime: ExpirationTime) {
   // TODO: Get rid of Sync and use current time?
   if (expirationTime === Sync) {
     performSyncWork();
-  } else {
+  } else { 
+    // 异步任务调用的方法
     scheduleCallbackWithExpirationTime(root, expirationTime);
   }
 }

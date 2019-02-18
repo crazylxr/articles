@@ -4,6 +4,10 @@
 
 
 
+
+
+
+
 每一次进入调度队列的都是 FiberRoot，不是 setState 的节点
 
 ```javascript
