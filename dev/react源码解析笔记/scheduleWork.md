@@ -2,18 +2,12 @@
 - 如果符合条件重置 stack
 - 如果符合条件就请求工作调度
 
-
-
-
-
-
-
 每一次进入调度队列的都是 FiberRoot，不是 setState 的节点
 
 ```javascript
 
 function scheduleWork(fiber: Fiber, expirationTime: ExpirationTime) {
-  // 在 render 的时候传的就是FFiberRoot 节点，但是 setState 的时候不是，所以要去找到 FiberRoot
+  // 在 render 的时候传的就是FiberRoot 节点，但是 setState 的时候不是，所以要去找到 FiberRoot
   const root = scheduleWorkToRoot(fiber, expirationTime);
   if (root === null) {
     return;
