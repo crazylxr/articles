@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>桃翁的文档库</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Description">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+    <style>
+        .app-name-link {
+            width: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+        .app-name-link img {
+            width: 100%;
+            display: block;
+            border-radius: 100px;
+            box-shadow: 0 0 16px 0 #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">加载中...</div>
+
+    <script>
+        window.$docsify = {
+            homepage: 'home.md',
+            logo: '_media/logo.png',
+            name: '桃翁',
+            nameLink: '#/',
+            repo: 'https://github.com/crazylxr/articles.git',
+
+            loadSidebar: true,
+            subMaxLevel: 1,
+
+            loadNavbar: true,
+
+            auto2top: true,
+            coverpage: true,
+            autoHeader: true,
+            mergeNavbar: true,
+            formatUpdated: '{YYYY}/{MM}/{DD} {HH}:{mm}',
+            externalLinkTarget: '_blank', //_self
+            notFoundPage: true,
+
+            search: {
+                maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+                paths: 'auto',
+                placeholder: 'Type to search',
+
+                // 支持本地化
+                placeholder: {
+                    '/zh-cn/': '搜索',
+                    '/': 'Type to search'
+                },
+
+                noData: 'No Results!',
+
+                // 支持本地化
+                noData: {
+                    '/zh-cn/': '找不到结果',
+                    '/': 'No Results',
+                },
+
+                // 搜索标题的最大程级, 1 - 6
+                depth: 2,
+            },
+        }
+    </script>
+    <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+    <script src="//unpkg.com/docsify/lib/plugins/emoji.js"></script>
+    <script src="//unpkg.com/docsify/lib/plugins/zoom-image.js"></script>
+    <script src="//unpkg.com/docsify-copy-code"></script>
+    <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+* [弃坑保平安](/photograph/index)
