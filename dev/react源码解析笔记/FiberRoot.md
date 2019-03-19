@@ -2,7 +2,7 @@
 * 记录节点的各种状态(state,props 等)，不是在 this 上
 * 串联整个应用形成结构，串联的，不是树形的，只存第一个子节点
 
-
+```javascript
 // Fiber 对应一个组件需要被处理或者已经处理了，一个组件可以有一个或者多个Fiber
 type Fiber = {|
   // 标记不同的组件类型，比如 ClassComponent， functionComponent 这种
@@ -109,3 +109,4 @@ type Fiber = {|
   _debugOwner?: Fiber | null,
   _debugIsCurrentlyTiming?: boolean,
 |};
+```

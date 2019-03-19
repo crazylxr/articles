@@ -4,8 +4,6 @@
 - 循环渲染 Root 条件
 - 超过时间片的处理
 
-
-
 ```javascript
 function performAsyncWork() {
   try {
