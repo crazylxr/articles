@@ -14,7 +14,7 @@ function scheduleWork(fiber: Fiber, expirationTime: ExpirationTime) {
   }
 
   // 高优先级的任务打断了老的任务。
-  // isWorking 表示现在是否有任务正在执行
+  // isWorking 表示现在是否有任务正 在执行
   // nextRenderExpirationTime 表示下一次渲染节点的 ExpirationTime
   // 那么合起来判断的就是是否是 working，然后有下一次渲染，并且下一次的 ExpirationTime 小于 expirationTime，那么就代表目前的任务的优先级比较高，所以就暂停下一个的，直接 resetStack
   if (
@@ -70,6 +70,7 @@ function scheduleWorkToRoot(fiber: Fiber, expirationTime): FiberRoot | null {
   recordScheduleUpdate();
 
   // Update the source fiber's expiration time
+  // 设置为优先级更高的 expirationTime
   if (fiber.expirationTime < expirationTime) {
     fiber.expirationTime = expirationTime;
   }
@@ -80,12 +81,12 @@ function scheduleWorkToRoot(fiber: Fiber, expirationTime): FiberRoot | null {
   // Walk the parent path to the root and update the child expiration time.
   // 获取到父节点
   let node = fiber.return;
-  let root = null;
-逼
+  let root = null; //  其实是 FiberRoot
+
   // 如果 node 等于 null 代表就是 RootFiber
   if (node === null && fiber.tag === HostRoot) {
-    root = fiber.stateNode;
-  } else {
+    root = fiber.stateNode; // RootFiber 的 stateNode 就是 FiberRoot
+  } else { 
     // 从下往上设置 childExpirationTime，直到 node 为 null 的时候就是 root
     while (node !== null) {
       alternate = node.alternate;
@@ -112,7 +113,7 @@ function scheduleWorkToRoot(fiber: Fiber, expirationTime): FiberRoot | null {
     }
   }
 
-  // 跟踪应用更新
+  // 跟踪应用更新，不用深入了解
   if (enableSchedulerTracing) {
     if (root !== null) {
       const interactions = __interactionsRef.current;
@@ -162,6 +163,7 @@ function resetStack() {
     
     // 这样理论上也是找到根节点
     while (interruptedWork !== null) {
+      // 有可能已经有节点已经更新了，需要重置回未更新的状态
       unwindInterruptedWork(interruptedWork);
       interruptedWork = interruptedWork.return;
     }

@@ -88,6 +88,7 @@ function scheduleCallbackWithExpirationTime(
   if (callbackExpirationTime !== NoWork) {
     // A callback is already scheduled. Check its expiration time (timeout).
     if (expirationTime < callbackExpirationTime) {
+      // 当前的优先级低，直接 return
       // Existing callback has sufficient timeout. Exit.
       return;
     } else {
@@ -117,6 +118,7 @@ function scheduleCallbackWithExpirationTime(
 
 ```javascript
 // 第一个是要执行的callback,暂时可以理解为一个任务。第二个参数是可选的，可以传入一个超时时间来标识这个任务过多久超时。如果不传的话就会根据上述的任务优先级确定过期时间。
+// 在 React 里 callback 其实就是 performAsyncWork
 function unstable_scheduleCallback(callback, deprecated_options) {
   var startTime =
     currentEventStartTime !== -1 ? currentEventStartTime : getCurrentTime();

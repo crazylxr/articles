@@ -508,6 +508,10 @@ function resetStack() {
 
 #### requestWork
 
+- 加入到 root 调度队列
+- 判断是否批量更新
+- 根据 expirationTime 判断调度类型
+
 ```javascript
 /*** react-reconciler/src/ReactFiberScheduler.js ***/
 
@@ -544,6 +548,7 @@ function requestWork(root: FiberRoot, expirationTime: ExpirationTime) {
   }
 
   // TODO: Get rid of Sync and use current time?
+  // 如果是同步任务执行 performSysnWork
   if (expirationTime === Sync) {
     performSyncWork();
   } else {
