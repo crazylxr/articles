@@ -35,27 +35,39 @@ function performAsyncWork() {
 
 ```
 
-在处理异步任务的时候，是需要从整个 root 链表里找到优先级最高的那一个，将下一个过期
-
-
-
 ```javascript
-
 function performSyncWork() {
   performWork(Sync, false);
 }
+
+
+```
+
+## performWork
+
+执行工作的函数。
+
+performWork的作用就是“刷新”待更新队列，执行待更新的事务：
+
+既然要执行 work，那么首先得需要知道下一步要执行哪一个 work。
+
+`findHigestPriorityRoot` 函数就是用来找到最高优先级的 work，然后进行执行。
+
+```javascript
 
 function performWork(minExpirationTime: ExpirationTime, isYieldy: boolean) {
   // Keep working on roots until there's no more work, or until there's a higher
   // priority event.
   // 继续 work，直到没有更多的 work，或直到有更高优先级的事件。
+  // 修改 nextFlushedRoot 、nextFlushedExpirationTime 两个全局变量
   findHighestPriorityRoot();
 
-  // isYield 是否可中断
+  // isYieldy 在同步的情况下是false，而在异步情况下是true
   if (isYieldy) {
     recomputeCurrentRendererTime();
     currentSchedulerTime = currentRendererTime;
-
+     
+    // 这个跟我们的主流程没有关系，直接忽略掉
     if (enableUserTimingAPI) {
       const didExpire = nextFlushedExpirationTime > currentRendererTime;
       const timeout = expirationTimeToMs(nextFlushedExpirationTime);
@@ -66,7 +78,9 @@ function performWork(minExpirationTime: ExpirationTime, isYieldy: boolean) {
       nextFlushedRoot !== null &&
       nextFlushedExpirationTime !== NoWork &&
       minExpirationTime <= nextFlushedExpirationTime &&
-      !(didYield && currentRendererTime > nextFlushedExpirationTime)
+      !(didYield && currentRendererTime > nextFlushedExpirationTime) // 这个判断代表任务过期
+      // 在帧未到期 或者 当前渲染时间大于等于nextFlushedExpirationTime时才执行 performWorkOnRoot, 并将currentRendererTime >= nextFlushedExpirationTime作为第三个参数传入，
+
     ) {
       performWorkOnRoot(
         nextFlushedRoot,
@@ -129,16 +143,7 @@ function findHighestPriorityRoot() {
       const remainingExpirationTime = root.expirationTime;
       if (remainingExpirationTime === NoWork) {
         // 因为 expirationTime 等于 NoWork ，所以在这种情况下的节点都应该从 schedule 里面删除
-        // This root no longer has work. Remove it from the scheduler.
-
-        // TODO: This check is redudant, but Flow is confused by the branch
-        // below where we set lastScheduledRoot to null, even though we break
-        // from the loop right after.
-        invariant(
-          previousScheduledRoot !== null && lastScheduledRoot !== null,
-          'Should have a previous and last root. This error is likely ' +
-            'caused by a bug in React. Please file an issue.',
-        );
+        
         if (root === root.nextScheduledRoot) { // 代表就只有这一个节点
           // This is the only root in the list.
           root.nextScheduledRoot = null;
