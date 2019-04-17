@@ -4,4 +4,4 @@ git add .
 git commit -m 'auto commit'
 git push
 
-echo "提交完毕"
+echo "---------提交完毕----------"
