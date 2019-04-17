@@ -92,11 +92,13 @@ function performWork(minExpirationTime: ExpirationTime, isYieldy: boolean) {
       currentSchedulerTime = currentRendererTime;
     }
   } else {
+    // 同步的时候 minExpirationTime 是 SYNC，是最大的，所以nextFlushedExpirationTime只能是 SYNC 才行
     while (
       nextFlushedRoot !== null &&
       nextFlushedExpirationTime !== NoWork &&
       minExpirationTime <= nextFlushedExpirationTime
     ) {
+      // 会执行掉这个work ，并把他设置为空，不然下次循环还在
       performWorkOnRoot(nextFlushedRoot, nextFlushedExpirationTime, false);
       findHighestPriorityRoot();
     }
@@ -189,6 +191,87 @@ function findHighestPriorityRoot() {
 
   nextFlushedRoot = highestPriorityRoot;
   nextFlushedExpirationTime = highestPriorityWork;
+}
+```
+
+# performWorkOnRoot
+
+执行 root 的函数。
+
+```javascript
+function performWorkOnRoot(
+  root: FiberRoot,
+  expirationTime: ExpirationTime,
+  isYieldy: boolean,
+) {
+  isRendering = true;
+
+  // Check if this is async work or sync/expired work.
+  // 检查这是否是异步工作或同步/过期工作。同步和过期任务执行逻辑
+  if (!isYieldy) {
+    // Flush work without yielding.
+    // TODO: Non-yieldy work does not necessarily imply expired work. A renderer
+    // may want to perform some work without yielding, but also without
+    // requiring the root to complete (by triggering placeholders).
+
+    let finishedWork = root.finishedWork;
+    // 一般来说进来都是 null 的，不过有上次被中断的情况，那么 finnishWork 就是有值的，所以需要判断一下
+    if (finishedWork !== null) {
+      // This root is already complete. We can commit it.
+      completeRoot(root, finishedWork, expirationTime);
+    } else {
+      root.finishedWork = null;
+      // If this root previously suspended, clear its existing timeout, since
+      // we're about to try rendering again.
+      // 如果该 root 提前暂停，请清除其现有超时，因为我们将要再次尝试渲染。
+      const timeoutHandle = root.timeoutHandle;
+      if (timeoutHandle !== noTimeout) {
+        root.timeoutHandle = noTimeout;
+        // $FlowFixMe Complains noTimeout is not a TimeoutID, despite the check above
+        cancelTimeout(timeoutHandle);
+      }
+      // renderRoot 执行完之后会赋值 finishedWork，这个work 是 rootWorkInProgress，不是 root
+      renderRoot(root, isYieldy);
+      finishedWork = root.finishedWork;
+      if (finishedWork !== null) {
+        // We've completed the root. Commit it.
+        completeRoot(root, finishedWork, expirationTime);
+      }
+    }
+  } else {
+    // Flush async work.
+    let finishedWork = root.finishedWork;
+    if (finishedWork !== null) {
+      // This root is already complete. We can commit it.
+      completeRoot(root, finishedWork, expirationTime);
+    } else {
+      root.finishedWork = null;
+      // If this root previously suspended, clear its existing timeout, since
+      // we're about to try rendering again.
+      const timeoutHandle = root.timeoutHandle;
+      if (timeoutHandle !== noTimeout) {
+        root.timeoutHandle = noTimeout;
+        // $FlowFixMe Complains noTimeout is not a TimeoutID, despite the check above
+        cancelTimeout(timeoutHandle);
+      }
+      renderRoot(root, isYieldy);
+      finishedWork = root.finishedWork;
+      if (finishedWork !== null) {
+        // We've completed the root. Check the if we should yield one more time
+        // before committing.
+        if (!shouldYieldToRenderer()) {
+          // Still time left. Commit the root.
+          completeRoot(root, finishedWork, expirationTime);
+        } else {
+          // There's no time left. Mark this root as complete. We'll come
+          // back and commit it later.
+          root.finishedWork = finishedWork;
+        }
+      }
+    }
+  }
+
+  isRendering = false;
 }
 ```
 
