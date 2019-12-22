@@ -137,9 +137,9 @@ class Component {
 // Inside your code
 class Button extends React.Component {
   constructor(props) {
-    super(); // 😬 忘了传入 props
-    console.log(props); // ✅ {}
-    console.log(this.props); // 😬 undefined
+    super(); //  忘了传入 props
+    console.log(props); //  {}
+    console.log(this.props); //  undefined
   }
   // ...
 }
@@ -150,9 +150,9 @@ class Button extends React.Component {
 ```js
 class Button extends React.Component {
   constructor(props) {
-    super(props); // ✅ We passed props
-    console.log(props); // ✅ {}
-    console.log(this.props); // ✅ {}
+    super(props); //  We passed props
+    console.log(props); //  {}
+    console.log(this.props); //  {}
   }
   // ...
 }
